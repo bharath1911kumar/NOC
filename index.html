@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Shift Scheduler</title>
+    <meta name="description" content="Auto-generate weekly employee shift rosters with smart scheduling rules, week navigation, analytics charts, and Excel/CSV export." />
+    <link rel="icon" href="appglide-logo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+
+      <!-- ── Top Bar ── -->
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <img class="brand-logo" src="appglide-logo.png" alt="AppGlide Solutions" />
+            <div>
+              <h1>RoRoNoA Shift Scheduler</h1>
+              <p class="brand-sub">Internal NOC team · AppGlide Solutions</p>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button id="theme-toggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
+              <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+            <button id="fullscreen-btn" class="icon-btn" title="Fullscreen" aria-label="Toggle fullscreen">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-inner">
+          <span class="hero-pill">Internal · NOC Shift Roster</span>
+          <h2 class="hero-title">Weekly coverage without the spreadsheet chaos</h2>
+          <p class="hero-sub">
+            Built for one AppGlide team. Auto-rotate night crew, morning, evening, and floaters — then export a clean week or full month.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#app">Open scheduler</a>
+            <a class="btn btn-outline" href="#how">See how it works</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="split" id="how">
+        <div class="split-grid">
+          <article class="split-card split-before">
+            <p class="split-kicker">Before</p>
+            <h3>Missed shifts and last-minute firefighting</h3>
+            <ul>
+              <li>Weekend coverage guessed in Excel</li>
+              <li>Night crew overlapping or understaffed</li>
+              <li>Swap requests buried in chat</li>
+              <li>No view of who is overloaded</li>
+            </ul>
+          </article>
+          <article class="split-card split-after">
+            <p class="split-kicker">After</p>
+            <h3>Balanced roster, validated coverage</h3>
+            <ul>
+              <li>Role pools: Night 3 · Morning 2 · Evening 4 · Floaters</li>
+              <li>Weekend target: 1M + 1E + 1G + 2N</li>
+              <li>Fair offs (~2 per person / week)</li>
+              <li>Excel / CSV export for ops</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── Main Content ── -->
+      <main class="main" id="app">
+
+        <!-- Month Navigator -->
+        <div class="month-strip">
+          <button id="prev-month" class="nav-arrow" aria-label="Previous month">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="month-center">
+            <span class="month-label" id="month-name">June 2026</span>
+            <button class="pill-btn" id="go-today">Today</button>
+          </div>
+          <button id="next-month" class="nav-arrow" aria-label="Next month">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Team Panel -->
+        <section class="team-panel" id="team-panel">
+          <div class="team-panel-head">
+            <div class="team-panel-title-wrap">
+              <span class="team-title">Team Roster</span>
+              <span class="team-count" id="member-count">12 members</span>
+            </div>
+            <button id="toggle-team-btn" class="pill-btn" type="button">Manage Team</button>
+          </div>
+          <div id="team-panel-body" class="team-panel-body">
+            <div class="team-warn" id="member-warn" hidden></div>
+            <ul class="member-list" id="member-list">
+              <!-- Populated by JS -->
+            </ul>
+            <div class="member-add-row">
+              <input type="text" id="member-input" class="member-input" placeholder="Add new member..." />
+              <button id="member-add" class="btn btn-primary" type="button">Add</button>
+              <button id="member-reset-default" class="btn btn-ghost" type="button" title="Reset to default 12 members">Reset Defaults</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+          <div class="action-group">
+            <button id="regen" class="btn btn-primary" title="Reshuffle daily assignments while preserving weekly pool allocations">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+              Regenerate
+            </button>
+            <button id="analytics-toggle" class="btn btn-outline" title="Toggle Shift Distribution & Coverage Analytics">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              Analytics &amp; Charts
+            </button>
+          </div>
+          <div class="action-group">
+            <button id="dl" class="btn btn-ghost" title="Export visible week to formatted Excel file">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download Week
+            </button>
+            <button id="dl-all" class="btn btn-ghost" title="Export all weeks and summary chart to a single unified Excel workbook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export Month (All-in-One)
+            </button>
+            <button id="dl-csv" class="btn btn-ghost" title="Export complete monthly schedule as CSV">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Export CSV
+            </button>
+            <button id="view-toggle" class="btn btn-outline" title="Toggle between single week tabs and all weeks view">
+              <svg class="icon-grid" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              All Weeks
+            </button>
+          </div>
+        </div>
+
+        <!-- Analytics & Chart Section (collapsible / toggleable) -->
+        <section id="analytics-section" class="analytics-card hidden">
+          <!-- Populated by JS -->
+        </section>
+
+        <!-- Week Tabs -->
+        <div class="tab-bar" id="tabs">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Schedule Area -->
+        <div id="weeks">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Shift Legend (inline, compact) -->
+        <div class="legend-strip" id="legend">
+          <!-- Populated by JS -->
+        </div>
+
+      </main>
+
+      <!-- ── Footer ── -->
+      <footer class="footer">
+        <span>Made with ❤️ by BHARATH Kumar</span>
+        <span class="footer-sep">·</span>
+        <span class="footer-hint">← → switch weeks · Ctrl+← → switch months</span>
+      </footer>
+
+    </div>
+    <script src="logic.js"></script>
+  </body>
+</html>
